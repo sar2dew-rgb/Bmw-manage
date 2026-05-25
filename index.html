@@ -1,12 +1,761 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2e7d32">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced BMW Management App</title>
 
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color"
+        content="#0d47a1">
+
+  <link rel="manifest"
+        href="/manifest.json">
+
+  <title>Advanced BMW Management App</title>
+  
+<style>
+
+.filter-buttons{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.filter-buttons button{
+    border:none;
+    padding:12px 20px;
+    border-radius:25px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:15px;
+}
+
+.filter-buttons button:hover{
+    transform:scale(1.05);
+}
+
+.all{
+    background:#1565c0;
+    color:white;
+}
+
+.yellowBtn{
+    background:#fff59d;
+}
+
+.redBtn{
+    background:#ef9a9a;
+}
+
+.whiteBtn{
+    background:#eceff1;
+    border:1px solid #bbb;
+}
+
+.blueBtn{
+    background:#90caf9;
+}
+
+.bin-info-box{
+    display:none;
+    max-width:750px;
+    margin:0 auto 25px auto;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.bin-info-box h3{
+    color:#1565c0;
+    margin-bottom:10px;
+}
+
+.bin-info-box p{
+    margin-bottom:10px;
+    line-height:1.5;
+}
+
+.bin-info-box ul{
+    padding-left:20px;
+    line-height:1.7;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#eef3f8;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    color:#0d47a1;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#555;
+    margin-bottom:25px;
+}
+
+.search-container{
+    max-width:800px;
+    margin:auto;
+    margin-bottom:25px;
+}
+
+#searchInput{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    outline:none;
+}
+
+.filter-buttons{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.filter-buttons button{
+    padding:10px 18px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.filter-buttons button:hover{
+    transform:scale(1.05);
+}
+
+.all{background:#1565c0;color:white;}
+.yellowBtn{background:#fff59d;}
+.redBtn{background:#ef9a9a;}
+.whiteBtn{background:#eceff1;}
+.blueBtn{background:#90caf9;}
+
+.results{
+    max-width:950px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.card{
+    display:none;
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 6px 14px rgba(0,0,0,0.15);
+    animation:fadeIn 0.3s ease;
+}
+
+.card-top{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:#f5f9ff;
+    padding:15px;
+}
+
+.card-top img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.card-top h2{
+    color:#1565c0;
+}
+
+.content{
+    padding:20px;
+}
+
+.section{
+    margin-bottom:14px;
+}
+
+.section h3{
+    color:#d32f2f;
+    margin-bottom:6px;
+}
+
+.section p,
+.section li{
+    line-height:1.6;
+    color:#333;
+}
+
+ul{
+    padding-left:20px;
+}
+
+.yellow{
+    background:#fff59d;
+    padding:4px 10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.red{
+    background:#ef9a9a;
+    padding:4px 10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.white{
+    background:#eceff1;
+    padding:4px 10px;
+    border-radius:8px;
+    border:1px solid #aaa;
+    font-weight:bold;
+}
+
+.blue{
+    background:#90caf9;
+    padding:4px 10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.risk{
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:10px;
+    color:white;
+    font-weight:bold;
+}
+
+.low{background:green;}
+.medium{background:orange;}
+.high{background:red;}
+.critical{background:darkred;}
+
+.no-result{
+    text-align:center;
+    color:#777;
+    display:none;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+.card{
+    animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+
+from{
+    opacity:0;
+    transform:translateY(10px);
+}
+
+to{
+    opacity:1;
+    transform:translateY(0);
+}
+
+}
+.yellowCard{
+    border-left:2.1px solid #fbc02d;
+}
+
+.redCard{
+    border-left:2.1px solid #e53935;
+}
+
+.whiteCard{
+    border-left:2.1px solid #bdbdbd;
+}
+
+.blueCard{
+    border-left:2.1px solid #1e88e5;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Advanced Bio-Medical Waste Management App</h1>
+
+<p class="subtitle">
+Search biomedical waste items for disposal guidance and environmental safety.
+</p>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search syringe, gauze, chemotherapy, vial...">
+</div>
+
+<!-- FILTER BUTTONS -->
+
+<div class="filter-buttons">
+
+<button class="all"
+onclick="filterCards('all')">
+All
+</button>
+
+<button class="yellowBtn"
+onclick="filterCards('yellow')">
+🟡 Yellow
+</button>
+
+<button class="redBtn"
+onclick="filterCards('red')">
+🔴 Red
+</button>
+
+<button class="whiteBtn"
+onclick="filterCards('white')">
+⚪ White
+</button>
+
+<button class="blueBtn"
+onclick="filterCards('blue')">
+🔵 Blue
+</button>
+
+</div>
+
+
+<!-- BIN INFO BOX -->
+
+<div id="binInfoBox" class="bin-info-box">
+
+<h3 id="binTitle"></h3>
+
+<p id="binDescription"></p>
+
+<ul id="binList"></ul>
+
+</div>
+
+<div class="results">
+
+<!-- SYRINGE -->
+<div class="card redCard" data-name="syringe injection disposable syringe plastic syringe">
+
+<div class="card-top">
+<img src="https://png.pngtree.com/png-clipart/20191120/original/pngtree-injection-syringe-icon-png-image_5069199.jpg">
+<h2>Used Plastic Syringe</h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Plastic Biomedical Waste</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="red">Red Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>ICU / Pharmacy / Ward</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Improper disposal produces long-lasting microplastic pollution.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk high">HIGH</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Separate needle using hub cutter.</li>
+<li>Disinfect with 1% hypochlorite.</li>
+<li>Place syringe body into red bag.</li>
+<li>Recycle after sterilization.</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+<!-- MICROBIOLOGY CULTURE -->
+
+<div class="card yellowCard"
+data-name="microbiology culture petri dish bacterial culture fungal culture lab culture">
+
+<div class="card-top">
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSROd53V0_oj7vNVFv9wxGMz3XD5chgsmDuQA&s">
+
+<h2>Microbiology Culture / Petri Dish</h2>
+
+</div>
+
+<div class="content">
+
+<div class="section">
+
+<h3>Material Composition</h3>
+
+<p>Infectious Laboratory Waste</p>
+
+</div>
+
+<div class="section">
+
+<h3>Waste Category & Bin</h3>
+
+<p><span class="yellow">Yellow Bin</span></p>
+
+</div>
+
+<div class="section">
+
+<h3>Hospital Department</h3>
+
+<p>Microbiology Laboratory / Pathology Laboratory</p>
+
+</div>
+
+<div class="section">
+
+<h3>Environmental Impact</h3>
+
+<p>
+Improper disposal of microbial cultures may release harmful
+bacteria or fungi into the environment and spread infections.
+</p>
+
+</div>
+
+<div class="section">
+
+<h3>Risk Level</h3>
+
+<p><span class="risk critical">CRITICAL</span></p>
+
+</div>
+
+<div class="section">
+
+<h3>Safe Disposal Protocol</h3>
+
+<ul>
+
+<li>Wear gloves, mask, and lab coat.</li>
+
+<li>Autoclave cultures before disposal.</li>
+
+<li>Place treated waste into yellow biomedical waste bag.</li>
+
+<li>Disinfect work surface using 1% hypochlorite.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EXPIRED TABLETS -->
+<div class="card yellowCard" data-name="expired tablets expired medicine tablets medicine strip old medicine pills pharmaceutical waste">
+
+<div class="card-top">
+<img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png">
+<h2>Expired Tablets </h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Pharmaceutical Waste (Active Chemical Compounds + Coating Materials)</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="yellow">Yellow Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>Pharmacy / Ward / Medicine Storage Unit</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Improper disposal can contaminate groundwater and contribute to antimicrobial resistance in environmental microorganisms.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk high">HIGH</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Do not throw in regular dustbins.</li>
+<li>Do not flush tablets into drains or toilets.</li>
+<li>Segregate expired medicines separately.</li>
+<li>Place in yellow biomedical waste container.</li>
+<li>Dispose through authorized incineration facility.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Example</h3>
+<p>Expired paracetamol tablets, antibiotic strips, unused prescription medicines.</p>
+</div>
+
+</div>
+</div>
+<!-- EXPIRED SYRUPS -->
+<div class="card yellowCard" data-name="expired syrup syrup liquid medicine cough syrup expired liquid medicine">
+
+<div class="card-top">
+<img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png">
+<h2>Expired Syrups / Liquid Medicines</h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Liquid Pharmaceutical Waste (Drug Solution + Plastic/Glass Container)</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="yellow">Yellow Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>Pharmacy / Pediatric Ward / Medicine Storage Unit</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Improper disposal into drains contaminates water bodies and can contribute to antibiotic resistance and toxicity to aquatic organisms.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk high">HIGH</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Do not pour into sinks or drains.</li>
+<li>Keep syrup in original sealed container.</li>
+<li>Segregate from regular plastic waste.</li>
+<li>Place in yellow biomedical waste container.</li>
+<li>Dispose through authorized incineration facility.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Example</h3>
+<p>Expired cough syrup, pediatric antibiotic syrup, vitamin syrup.</p>
+</div>
+
+</div>
+</div>
+<!-- OINTMENT TUBES -->
+<div class="card yellowCard" data-name="ointment tube cream tube expired ointment medicated cream tube">
+
+<div class="card-top">
+<img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png">
+<h2>Expired Ointment / Cream Tubes</h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Pharmaceutical Waste (Medicinal Cream + Aluminium / Plastic Tube)</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="yellow">Yellow Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>Pharmacy / Dermatology Department / Medicine Storage Unit</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Residual pharmaceutical compounds can contaminate soil and water, affecting microorganisms and aquatic ecosystems.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk medium">MEDIUM</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Do not squeeze contents into drains.</li>
+<li>Keep tube sealed if possible.</li>
+<li>Segregate from recyclable packaging waste.</li>
+<li>Place in yellow biomedical waste container.</li>
+<li>Dispose through authorized incineration.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Example</h3>
+<p>Expired antibiotic cream tube, antifungal ointment, burn cream tube.</p>
+</div>
+
+</div>
+</div>
+<!-- EYE DROPS -->
+<div class="card yellowCard" data-name="eye drops expired eye drops ophthalmic drops medicine drops">
+
+<div class="card-top">
+<img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png">
+<h2>Expired Eye Drops</h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Liquid Pharmaceutical Waste (Drug Solution + Plastic Dropper Bottle)</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="yellow">Yellow Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>Pharmacy / Ophthalmology Department / Ward</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Improper disposal may release pharmaceutical chemicals into water systems, affecting aquatic organisms and contributing to chemical contamination.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk medium">MEDIUM</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Do not empty contents into sink or drain.</li>
+<li>Keep bottle tightly closed.</li>
+<li>Segregate as pharmaceutical waste.</li>
+<li>Place in yellow biomedical waste container.</li>
+<li>Send for authorized incineration.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Example</h3>
+<p>Expired antibiotic eye drops, lubricating drops, anti-allergy ophthalmic solution.</p>
+</div>
+
+</div>
+</div>
+<!-- INSULIN VIALS -->
+<div class="card blueCard" data-name="insulin vial insulin bottle glass vial diabetic vial medicine vial">
+
+<div class="card-top">
+<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
+<h2>Used Insulin Vials</h2>
+</div>
+
+<div class="content">
+
+<div class="section">
+<h3>Material Composition</h3>
+<p>Glass Waste (Medical Glass with Drug Residue)</p>
+</div>
+
+<div class="section">
+<h3>Waste Category & Bin</h3>
+<p><span class="blue">Blue Bin</span></p>
+</div>
+
+<div class="section">
+<h3>Hospital Department</h3>
+<p>Pharmacy / Endocrinology Department / Ward</p>
+</div>
+
+<div class="section">
+<h3>Environmental Impact</h3>
+<p>Broken glass vials can cause injury, while residual insulin contamination may affect waste-processing systems.</p>
+</div>
+
+<div class="section">
+<h3>Risk Level</h3>
+<p><span class="risk medium">MEDIUM</span></p>
+</div>
+
+<div class="section">
+<h3>Safe Disposal Protocol</h3>
+<ul>
+<li>Ensure vial is empty.</li>
+<li>Do not break manually.</li>
+<li>Place directly into blue puncture-proof container.</li>
+<li>Disinfect if visibly contaminated.</li>
+<li>Send for glass recycling through authorized facility.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Example</h3>
+<p>Empty insulin injection vial used by diabetic patients.</p>
+</div>
+
+</div>
+</div>
 <style>
 
 .filter-buttons{
@@ -906,8 +1655,8 @@ bacteria or fungi into the environment and spread infections.
 </div>
 
 </div>
-    </div>
-    <!-- FORMALIN -->
+</div>
+<!-- FORMALIN -->
 <div class="card yellowCard" data-name="formalin formaldehyde preservative chemical waste specimen preservative">
 
 <div class="card-top">
@@ -961,537 +1710,8 @@ bacteria or fungi into the environment and spread infections.
 </div>
 </div>
 <!-- X-RAY DEVELOPER -->
-<div class="card yellowCard" data-name="xray developer x-ray developer radiology chemical developer solution">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Discarded X-Ray Developer Solution</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Chemical Waste (Developer Chemicals, Reducing Agents, Alkali Compounds)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Radiology Department / Diagnostic Imaging Unit</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>If released into drains, developer chemicals can alter water pH, harm aquatic organisms, and contaminate wastewater systems.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk high">HIGH</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Wear gloves and eye protection.</li>
-<li>Collect in sealed chemical-resistant container.</li>
-<li>Clearly label as hazardous radiology chemical waste.</li>
-<li>Do not discharge into drains.</li>
-<li>Send for authorized chemical treatment/disposal.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Spent X-ray film developing solution from imaging labs.</p>
-</div>
-
-</div>
-</div>
-<!-- DISINFECTANTS -->
-<div class="card yellowCard" data-name="disinfectants expired disinfectant chemical disinfectant glutaraldehyde hypochlorite">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Expired / Discarded Disinfectants</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Chemical Waste (Oxidizing / Antimicrobial Chemical Compounds)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>CSSD / Laboratory / ICU / Housekeeping Department</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal may harm aquatic ecosystems, disrupt microbial balance, and contaminate water sources with toxic residues.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk high">HIGH</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Wear gloves, mask, and eye protection.</li>
-<li>Keep in original labeled container.</li>
-<li>Do not pour directly into drains.</li>
-<li>Store in leak-proof chemical waste container.</li>
-<li>Send for authorized chemical treatment/disposal.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Expired sodium hypochlorite, glutaraldehyde solution, phenolic disinfectants.</p>
-</div>
-
-</div>
-</div>
-<!-- LABORATORY ACID -->
-<div class="card yellowCard" data-name="laboratory acid lab acid hydrochloric acid sulfuric acid nitric acid chemical waste">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Discarded Laboratory Acid</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Chemical Waste (Corrosive Acidic Compounds)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Pathology Laboratory / Biochemistry Lab / Research Unit</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal can alter soil and water pH, damage aquatic ecosystems, and corrode sewage infrastructure.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk critical">CRITICAL</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Wear acid-resistant gloves, apron, and eye protection.</li>
-<li>Store in chemical-resistant sealed container.</li>
-<li>Clearly label with acid type and concentration.</li>
-<li>Do not pour into drains unless neutralized as per protocol.</li>
-<li>Send for neutralization or authorized hazardous disposal.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Discarded hydrochloric acid from laboratory testing.</p>
-</div>
-
-</div>
-</div>
-<!-- MERCURY WASTE -->
-<div class="card yellowCard" data-name="mercury waste broken thermometer mercury spill sphygmomanometer">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Mercury Waste</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Heavy Metal Chemical Waste (Elemental Mercury)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Laboratory / ICU / General Ward / Diagnostic Unit</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Mercury contaminates water bodies and converts into methylmercury, a neurotoxin that bioaccumulates in fish and harms humans.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk critical">CRITICAL</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Evacuate immediate spill area.</li>
-<li>Wear gloves and protective mask.</li>
-<li>Collect using mercury spill kit (never broom or vacuum).</li>
-<li>Store in sealed airtight labeled container.</li>
-<li>Send to authorized mercury recovery/recycling facility.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Broken mercury thermometer or damaged BP apparatus.</p>
-</div>
-
-</div>
-</div>
-<!-- CLEANING CHEMICALS -->
-<div class="card yellowCard" data-name="cleaning chemicals floor cleaner bleach phenyl sanitizer chemical waste">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Discarded Cleaning Chemicals</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Chemical Waste (Detergents, Bleaching Agents, Solvents, Disinfectant Compounds)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Housekeeping / CSSD / Laboratory / General Maintenance</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal can alter water chemistry, harm aquatic life, and release toxic residues into soil and drainage systems.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk high">HIGH</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Wear gloves and eye protection.</li>
-<li>Keep chemicals in original labeled container.</li>
-<li>Do not mix incompatible chemicals.</li>
-<li>Store in leak-proof hazardous waste container.</li>
-<li>Send for authorized chemical disposal.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Expired bleach solution, floor disinfectant concentrate, phenyl cleaner.</p>
-</div>
-
-</div>
-</div>
-<!-- ECG LEADS -->
-<div class="card redCard" data-name="ecg leads ecg cable monitor leads cardiac leads electrode cable">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png">
-<h2>Discarded ECG Leads</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Contaminated Plastic / Rubber / Conductive Wire Waste</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="red">Red Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>ICU / Cardiology Department / Emergency Room</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal contributes to plastic accumulation and electronic component contamination in landfill systems.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk medium">MEDIUM</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Disconnect safely from monitoring equipment.</li>
-<li>Disinfect if contaminated.</li>
-<li>Segregate from general e-waste.</li>
-<li>Place in red biomedical waste bag if contaminated.</li>
-<li>Send for sterilization and authorized recycling.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Damaged patient ECG monitor lead wires.</p>
-</div>
-
-</div>
-</div>
-<!-- OLD BP MACHINE -->
-<div class="card blueCard" data-name="bp machine blood pressure monitor sphygmomanometer old bp monitor">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png">
-<h2>Old Blood Pressure Machine</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Electronic Waste (Plastic, Circuit Board, Metal Components)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p>Outside BMW Category – E-Waste Recycling</p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>General Ward / ICU / OPD / Biomedical Engineering Unit</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal can release heavy metals and toxic electronic components into soil and groundwater.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk medium">MEDIUM</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Disconnect batteries safely.</li>
-<li>Check for mercury if old manual type.</li>
-<li>Segregate from biomedical waste.</li>
-<li>Send to authorized e-waste recycler.</li>
-<li>Document disposal as per hospital asset protocol.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Non-functional digital BP monitor or damaged sphygmomanometer.</p>
-</div>
-
-</div>
-</div>
-<!-- THERMOMETER -->
-<div class="card yellowCard" data-name="thermometer mercury thermometer broken thermometer temperature device">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png">
-<h2>Broken Mercury Thermometer</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Glass + Hazardous Heavy Metal Waste (Mercury)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="yellow">Yellow Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Ward / ICU / Laboratory / OPD</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Mercury vapor is toxic and can contaminate air, soil, and water, later converting into methylmercury that bioaccumulates in food chains.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk critical">CRITICAL</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Evacuate immediate area.</li>
-<li>Wear gloves and protective mask.</li>
-<li>Never use broom or vacuum cleaner.</li>
-<li>Collect mercury using mercury spill kit.</li>
-<li>Store in airtight labeled container and send for authorized hazardous disposal.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Broken clinical mercury thermometer from hospital ward.</p>
-</div>
-
-</div>
-</div>
-<!-- BATTERY -->
-<div class="card blueCard" data-name="battery used battery medical battery lithium battery device battery">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png">
-<h2>Used Medical Device Battery</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Hazardous Electronic Waste (Lithium / Alkaline / Heavy Metal Components)</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p>Outside BMW Category – Battery / E-Waste Recycling</p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>Biomedical Engineering Unit / ICU / Laboratory / General Ward</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal can release toxic metals and corrosive chemicals into soil and groundwater, causing long-term contamination.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk high">HIGH</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Remove battery carefully from device.</li>
-<li>Do not puncture or crush.</li>
-<li>Store in non-conductive collection container.</li>
-<li>Keep away from heat sources.</li>
-<li>Send to authorized battery recycling facility.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Used glucometer battery, digital thermometer battery, BP monitor battery.</p>
-</div>
-
-</div>
-</div>
-<!-- BIOMEDICAL SENSORS -->
-<div class="card redCard" data-name="biomedical sensors patient sensor pulse oximeter sensor ecg sensor disposable sensor">
-
-<div class="card-top">
-<img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png">
-<h2>Used Biomedical Sensors</h2>
-</div>
-
-<div class="content">
-
-<div class="section">
-<h3>Material Composition</h3>
-<p>Contaminated Plastic / Polymer / Conductive Material Waste</p>
-</div>
-
-<div class="section">
-<h3>Waste Category & Bin</h3>
-<p><span class="red">Red Bin</span></p>
-</div>
-
-<div class="section">
-<h3>Hospital Department</h3>
-<p>ICU / Cardiology / Emergency Room / Monitoring Unit</p>
-</div>
-
-<div class="section">
-<h3>Environmental Impact</h3>
-<p>Improper disposal contributes to plastic accumulation and may introduce electronic residues into landfill systems.</p>
-</div>
-
-<div class="section">
-<h3>Risk Level</h3>
-<p><span class="risk medium">MEDIUM</span></p>
-</div>
-
-<div class="section">
-<h3>Safe Disposal Protocol</h3>
-<ul>
-<li>Disconnect safely from monitoring device.</li>
-<li>Disinfect if visibly contaminated.</li>
-<li>Place in red biomedical waste bag.</li>
-<li>Do not mix with general plastic waste.</li>
-<li>Send for sterilization and authorized recycling.</li>
-</ul>
-</div>
-
-<div class="section">
-<h3>Example</h3>
-<p>Disposable pulse oximeter probes, ECG adhesive sensors.</p>
-</div>
-
-</div>
-</div>
-
-<!-- EXPIRED CAPSULES -->
+<div class="card yellowCard" data-name="xray developer x-ray developer radiology chemical developer solutio
+    <!-- EXPIRED CAPSULES -->
 <div class="card yellowCard" data-name="expired capsules old capsules medicine capsules pharmaceutical waste gelatin capsules">
 
 <div class="card-top">
@@ -1672,6 +1892,7 @@ pathogens and contaminate soil and water sources.
 </div>
 
 </div>
+
 <!-- ANATOMICAL WASTE -->
 
 <div class="card yellowCard"
@@ -2045,7 +2266,6 @@ Foley catheter, urinary drainage tubing, bladder irrigation catheter
 <h3>Hospital Department</h3>
 <p>Ward / ICU / Emergency Room / Operation Theatre</p>
 </div>
-
 <div class="section">
 <h3>Environmental Impact</h3>
 <p>Improper disposal of blood-contaminated IV tubing may release infectious pathogens and non-biodegradable plastic into the environment.</p>
@@ -2446,7 +2666,7 @@ Foley catheter, urinary drainage tubing, bladder irrigation catheter
 No matching biomedical waste found.
 </p>
 
-  <script>
+<script>
 
 const searchInput = document.getElementById('searchInput');
 const cards = document.querySelectorAll('.card');
@@ -2685,10 +2905,18 @@ else{
 
 </script>
 <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log('Service Worker Registered'));
-}
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker
+                .register("./sw.js")
+                .then(() => {
+                    console.log("Service Worker registered");
+                })
+                .catch((err) => {
+                    console.log("Service Worker failed:", err);
+                });
+        });
+    }
 </script>
 </body>
-</html>  
+</html>
