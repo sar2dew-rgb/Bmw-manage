@@ -3,7 +3,9 @@ const ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "https://cdn-icons-png.flaticon.com/512/2966/2966487.png",
+  "file_00000000b2d471f 891e27f78d95d5b81.pn
+
+g",
   "https://cdn-icons-png.flaticon.com/512/3209/3209265.png",
   "https://cdn-icons-png.flaticon.com/512/4320/4320371.png",
   "https://cdn-icons-png.flaticon.com/512/6195/6195700.png",
