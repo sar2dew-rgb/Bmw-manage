@@ -1,21 +1,17 @@
 {
-  "name": "Bio Medical Waste Management",
   "short_name": "BMW App",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#eef3f8",
-  "theme_color": "#0d47a1",
-  "orientation": "portrait",
+  "name": "Advanced Bio-Medical Waste Management App",
   "icons": [
     {
-      "src": "file_00000000b2d471f891e27f78d95d5b81.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "file_00000000b2d471f891e27f78d95d5b81.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2785/2785819.png",
+      "type": "image/png",
       "sizes": "512x512",
-      "type": "image/png"
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "background_color": "#eef3f8",
+  "theme_color": "#0d47a1",
+  "display": "standalone",
+  "orientation": "portrait"
 }
