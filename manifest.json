@@ -1,0 +1,17 @@
+{
+  "name": "BMW Waste Search System",
+  "short_name": "BMW Waste",
+  "description": "Search any biomedical waste item to get disposal guidance",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef3f8",
+  "theme_color": "#0d47a1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966487.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
